@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Школьные мероприятия</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f3f4f6;
+}
+
+header{
+    background:#2563eb;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+input, select, textarea, button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    box-sizing:border-box;
+}
+
+button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-size:15px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.error{
+    color:red;
+    margin-top:10px;
+}
+
+.hidden{
+    display:none;
+}
+
+.switch-buttons{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.events-list .event{
+    background:#f9fafb;
+    padding:15px;
+    border-left:5px solid #2563eb;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+}
+
+.day{
+    background:white;
+    border-radius:10px;
+    min-height:100px;
+    padding:10px;
+    box-shadow:0 1px 5px rgba(0,0,0,0.1);
+}
+
+.day-number{
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.event-mini{
+    background:#2563eb;
+    color:white;
+    padding:5px;
+    border-radius:6px;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.question-box{
+    margin-top:15px;
+}
+
+.question{
+    background:#e0e7ff;
+    padding:8px;
+    border-radius:8px;
+    margin-top:8px;
+}
+
+@media(max-width:700px){
+    .calendar-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Школьные мероприятия</h1>
+</header>
+
+<div class="container">
+
+    <!-- Регистрация -->
+    <div class="card" id="registerCard">
+
+        <h2>Регистрация</h2>
+
+        <input type="text" id="fio" placeholder="ФИО">
+
+        <input type="text" id="iin" placeholder="ИИН">
+
+        <input type="password" id="password" placeholder="Пароль">
+
+        <select id="role">
+            <option value="">Выберите роль</option>
+            <option>Ученик</option>
+            <option>Учитель</option>
+        </select>
+
+        <button onclick="register()">Войти</button>
+
+        <div class="error" id="error"></div>
+
+    </div>
+
+    <!-- Главная -->
+    <div class="hidden" id="mainPage">
+
+        <div class="switch-buttons">
+            <button onclick="showList()">Список мероприятий</button>
+            <button onclick="showCalendar()">Календарь</button>
+        </div>
+
+        <!-- Список -->
+        <div id="listView" class="card events-list"></div>
+
+        <!-- Календарь -->
+        <div id="calendarView" class="card hidden">
+            <h2>Календарь месяца</h2>
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const currentYear = new Date().getFullYear();
+const nextYear = currentYear + 1;
+
+const events = [
+{
+    title:"Олимпиада по математике",
+    date:"2026-11-15",
+    time:"14:00",
+    place:"Кабинет 305",
+    description:"Школьная олимпиада среди учеников.",
+    classes:"7-12"
+},
+{
+    title:"Научная конференция",
+    date:"2027-03-10",
+    time:"12:00",
+    place:"Актовый зал",
+    description:"Выступления учеников и учителей.",
+    classes:"9-12"
+},
+{
+    title:"Турнир по футболу",
+    date:"2026-09-22",
+    time:"16:00",
+    place:"Спортзал",
+    description:"Командный турнир между классами.",
+    classes:"7-11"
+}
+];
+
+function register(){
+
+    const fio = document.getElementById("fio").value.trim();
+    const iin = document.getElementById("iin").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const role = document.getElementById("role").value;
+
+    const error = document.getElementById("error");
+
+    error.innerHTML = "";
+
+    // ФИО: 2 или 3 слова
+    const words = fio.split(" ").filter(w => w !== "");
+
+    if(words.length < 2 || words.length > 3){
+        error.innerHTML = "Заполните полностью секцию ФИО";
+        return;
+    }
+
+    // ИИН
+    if(!/^\d{12}$/.test(iin)){
+        error.innerHTML = "Заполните полностью секцию ИИН";
+        return;
+    }
+
+    // Пароль
+    if(password.length < 4){
+        error.innerHTML = "Заполните полностью секцию пароля";
+        return;
+    }
+
+    // Роль
+    if(role === ""){
+        error.innerHTML = "Выберите роль";
+        return;
+    }
+
+    document.getElementById("registerCard").classList.add("hidden");
+    document.getElementById("mainPage").classList.remove("hidden");
+
+    loadList();
+    loadCalendar();
+}
+
+function showList(){
+    document.getElementById("listView").classList.remove("hidden");
+    document.getElementById("calendarView").classList.add("hidden");
+}
+
+function showCalendar(){
+    document.getElementById("calendarView").classList.remove("hidden");
+    document.getElementById("listView").classList.add("hidden");
+}
+
+function loadList(){
+
+    const list = document.getElementById("listView");
+
+    list.innerHTML = "<h2>Мероприятия</h2>";
+
+    events.forEach((event,index)=>{
+
+        list.innerHTML += `
+        <div class="event">
+
+            <h3>${event.title}</h3>
+
+            <p><b>Дата:</b> ${event.date}</p>
+
+            <p><b>Время:</b> ${event.time}</p>
+
+            <p><b>Место:</b> ${event.place}</p>
+
+            <p><b>Описание:</b> ${event.description}</p>
+
+            <p><b>Классы:</b> ${event.classes}</p>
+
+            <div class="question-box">
+
+                <textarea id="question${index}" 
+                placeholder="Задать вопрос"></textarea>
+
+                <button onclick="addQuestion(${index})">
+                    Отправить вопрос
+                </button>
+
+                <div id="questions${index}"></div>
+
+            </div>
+
+        </div>
+        `;
+    });
+}
+
+function addQuestion(index){
+
+    const text = document.getElementById(`question${index}`).value;
+
+    if(text.trim() === "") return;
+
+    const div = document.getElementById(`questions${index}`);
+
+    div.innerHTML += `
+        <div class="question">
+            ❓ ${text}
+        </div>
+    `;
+
+    document.getElementById(`question${index}`).value = "";
+}
+
+function loadCalendar(){
+
+    const calendar = document.getElementById("calendarGrid");
+
+    calendar.innerHTML = "";
+
+    for(let i=1;i<=30;i++){
+
+        let html = `
+            <div class="day">
+                <div class="day-number">${i}</div>
+        `;
+
+        events.forEach(event=>{
+
+            const day = new Date(event.date).getDate();
+
+            if(day === i){
+
+                html += `
+                    <div class="event-mini">
+                        ${event.title}
+                    </div>
+                `;
+            }
+        });
+
+        html += `</div>`;
+
+        calendar.innerHTML += html;
+    }
+}
+
+</script>
+
+</body>
+</html>
