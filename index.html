@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>School Events</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="logged-out">
+
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay" class="login-overlay">
+    
+    <!-- LOGIN CARD -->
+    <div id="loginCard" class="login-card">
+        <h2>Вход в систему</h2>
+        <p>Пожалуйста, войдите, чтобы продолжить</p>
+        <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="username" placeholder="Имя пользователя">
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" placeholder="Пароль">
+        </div>
+        <button id="loginBtn">Войти</button>
+        
+        <div class="alt-actions">
+            <button id="guestBtn" class="guest-btn">Войти как гость</button>
+            <p>Нет аккаунта? <span id="toRegister">Зарегистрироваться</span></p>
+        </div>
+
+        <p id="loginError" class="login-error">Неверное имя пользователя или пароль</p>
+    </div>
+
+    <!-- REGISTER CARD (HIDDEN) -->
+    <div id="registerCard" class="login-card" style="display: none;">
+        <h2>Регистрация</h2>
+        <p>Создайте новый аккаунт</p>
+        <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="regUsername" placeholder="Имя пользователя">
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="regPassword" placeholder="Пароль">
+        </div>
+        <button id="registerBtn">Создать аккаунт</button>
+        
+        <div class="alt-actions">
+            <p>Уже есть аккаунт? <span id="toLogin">Войти</span></p>
+        </div>
+
+        <p id="regError" class="login-error">Пожалуйста, заполните все поля</p>
+        <p id="regSuccess" class="success-message" style="color: #22c55e;">Регистрация успешна! Теперь войдите.</p>
+    </div>
+
+</div>
+
+<header class="header">
+
+    <div class="logo">
+        School Events
+    </div>
+
+    <div class="view-buttons">
+
+        <button id="calendarBtn" class="active-btn">
+            <i class="fa-solid fa-calendar-days"></i>
+        </button>
+
+        <button id="feedBtn">
+            <i class="fa-solid fa-list"></i>
+        </button>
+
+        <button id="logoutBtn" class="logout-btn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+
+    </div>
+
+</header>
+
+<!-- CALENDAR -->
+
+<section class="calendar" id="calendarView">
+
+    <!-- DAYS -->
+
+    <div class="day-name">Пн</div>
+    <div class="day-name">Вт</div>
+    <div class="day-name">Ср</div>
+    <div class="day-name">Чт</div>
+    <div class="day-name">Пт</div>
+    <div class="day-name">Сб</div>
+    <div class="day-name">Вс</div>
+
+    <!-- EMPTY DAYS -->
+
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+    <div class="empty"></div>
+
+    <!-- MAY 1 -->
+
+    <div class="day">
+
+        <div class="day-number">1</div>
+
+        <div class="event"
+        onclick="openEvent('physics')">
+
+            <div class="dot blue"></div>
+            Физика
+
+        </div>
+
+    </div>
+
+    <!-- MAY 2 -->
+
+    <div class="day">
+
+        <div class="day-number">2</div>
+
+    </div>
+
+    <!-- MAY 3 -->
+
+    <div class="day">
+
+        <div class="day-number">3</div>
+
+    </div>
+
+    <!-- WEEK 2 -->
+
+    <div class="day">
+
+        <div class="day-number">4</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">5</div>
+
+        <div class="event"
+        onclick="openEvent('football')">
+
+            <div class="dot green"></div>
+            Футбол
+
+        </div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">6</div>
+
+    </div>
+
+   <div class="day">
+
+    <div class="day-number">7</div>
+
+    <div class="event"
+    onclick="openEvent('math')">
+
+        <div class="dot blue"></div>
+        Математика
+
+    </div>
+
+</div>
+
+<div class="day">
+
+    <div class="day-number">8</div>
+
+</div>
+
+<div class="day">
+
+    <div class="day-number">9</div>
+
+</div>
+
+<div class="day">
+
+    <div class="day-number">10</div>
+
+</div>
+
+<!-- WEEK 3 -->
+
+<div class="day special-week">
+
+    <div class="day-number">11</div>
+
+</div>
+
+<div class="day special-week">
+
+    <div class="day-number">12</div>
+
+    <div class="event"
+    onclick="openEvent('debate')">
+
+        <div class="dot yellow"></div>
+        Дебаты
+
+    </div>
+
+</div>
+
+<div class="day special-week">
+
+    <div class="day-number">13</div>
+
+</div>
+
+<div class="day special-week">
+
+    <div class="day-number">14</div>
+
+</div>
+
+<div class="day special-week">
+
+    <div class="day-number">15</div>
+
+    <div class="event"
+    onclick="openEvent('basketball')">
+
+        <div class="dot green"></div>
+        Баскетбол
+
+    </div>
+
+</div>
+
+    <div class="day">
+
+        <div class="day-number">16</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">17</div>
+
+    </div>
+
+    <!-- WEEK 4 -->
+
+    <div class="day">
+
+        <div class="day-number">18</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">19</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">20</div>
+
+        <div class="event"
+        onclick="openEvent('concert')">
+
+            <div class="dot yellow"></div>
+            Концерт
+
+        </div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">21</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">22</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">23</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">24</div>
+
+    </div>
+
+    <!-- WEEK 5 -->
+
+    <div class="day">
+
+        <div class="day-number">25</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">26</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">27</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">28</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">29</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">30</div>
+
+    </div>
+
+    <div class="day">
+
+        <div class="day-number">31</div>
+
+    </div>
+
+</section>
+
+<!-- FEED -->
+
+<section class="feed" id="feedView">
+
+    <!-- PHYSICS -->
+
+    <div class="event-card" id="physics">
+
+        <div class="card-top">
+
+            <h2>Олимпиада по физике</h2>
+
+            <div class="category blue">
+                Олимпиада
+            </div>
+
+        </div>
+
+        <p class="description">
+            Школьная олимпиада среди старших классов.
+        </p>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Дата</span>
+                <h4>1 мая 2026</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Время</span>
+                <h4>14:00</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Кабинет</span>
+                <h4>305</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Классы</span>
+                <h4>9–12</h4>
+            </div>
+
+        </div>
+
+        <div class="question-section">
+
+            <button class="question-btn"
+            onclick="toggleQuestion(this)">
+                Задать вопрос
+            </button>
+
+            <div class="question-box">
+
+                <textarea
+                placeholder="Введите вопрос..."></textarea>
+
+                <button class="send-btn"
+                onclick="sendQuestion(this)">
+                    Отправить
+                </button>
+
+                <p class="success-message">
+                    Вопрос отправлен
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTBALL -->
+
+    <div class="event-card" id="football">
+
+        <div class="card-top">
+
+            <h2>Турнир по футболу</h2>
+
+            <div class="category green">
+                Спорт
+            </div>
+
+        </div>
+
+        <p class="description">
+            Межклассный футбольный турнир.
+        </p>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Дата</span>
+                <h4>5 мая 2026</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Время</span>
+                <h4>16:00</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Место</span>
+                <h4>Спортзал</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Классы</span>
+                <h4>7–12</h4>
+            </div>
+
+        </div>
+
+        <div class="question-section">
+
+            <button class="question-btn"
+            onclick="toggleQuestion(this)">
+                Задать вопрос
+            </button>
+
+            <div class="question-box">
+
+                <textarea
+                placeholder="Введите вопрос..."></textarea>
+
+                <button class="send-btn"
+                onclick="sendQuestion(this)">
+                    Отправить
+                </button>
+
+                <p class="success-message">
+                    Вопрос отправлен
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MATH -->
+
+    <div class="event-card" id="math">
+
+        <div class="card-top">
+
+            <h2>Математический конкурс</h2>
+
+            <div class="category blue">
+                Олимпиада
+            </div>
+
+        </div>
+
+        <p class="description">
+            Командное соревнование по математике.
+        </p>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Дата</span>
+                <h4>7 мая 2026</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Время</span>
+                <h4>13:00</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Кабинет</span>
+                <h4>101</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Классы</span>
+                <h4>7–12</h4>
+            </div>
+
+        </div>
+
+        <div class="question-section">
+
+            <button class="question-btn"
+            onclick="toggleQuestion(this)">
+                Задать вопрос
+            </button>
+
+            <div class="question-box">
+
+                <textarea
+                placeholder="Введите вопрос..."></textarea>
+
+                <button class="send-btn"
+                onclick="sendQuestion(this)">
+                    Отправить
+                </button>
+
+                <p class="success-message">
+                    Вопрос отправлен
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- DEBATE -->
+
+    <div class="event-card" id="debate">
+
+        <div class="card-top">
+
+            <h2>Клуб дебатов</h2>
+
+            <div class="category yellow">
+                Другое
+            </div>
+
+        </div>
+
+        <p class="description">
+            Дискуссия о технологиях будущего.
+        </p>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Дата</span>
+                <h4>12 мая 2026</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Время</span>
+                <h4>15:30</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Кабинет</span>
+                <h4>210</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Классы</span>
+                <h4>8–11</h4>
+            </div>
+
+        </div>
+
+        <div class="question-section">
+
+            <button class="question-btn"
+            onclick="toggleQuestion(this)">
+                Задать вопрос
+            </button>
+
+            <div class="question-box">
+
+                <textarea
+                placeholder="Введите вопрос..."></textarea>
+
+                <button class="send-btn"
+                onclick="sendQuestion(this)">
+                    Отправить
+                </button>
+
+                <p class="success-message">
+                    Вопрос отправлен
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- BASKETBALL -->
+
+    <div class="event-card" id="basketball">
+
+        <div class="card-top">
+
+            <h2>Баскетбол</h2>
+
+            <div class="category green">
+                Спорт
+            </div>
+
+        </div>
+
+        <p class="description">
+            Баскетбольный матч между классами.
+        </p>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Дата</span>
+                <h4>15 мая 2026</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Время</span>
+                <h4>17:00</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Место</span>
+                <h4>Спортзал</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Классы</span>
+                <h4>7–12</h4>
+            </div>
+
+        </div>
+
+        <div class="question-section">
+
+            <button class="question-btn"
+            onclick="toggleQuestion(this)">
+                Задать вопрос
+            </button>
+
+            <div class="question-box">
+
+                <textarea
+                placeholder="Введите вопрос..."></textarea>
+
+                <button class="send-btn"
+                onclick="sendQuestion(this)">
+                    Отправить
+                </button>
+
+                <p class="success-message">
+                    Вопрос отправлен
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CONCERT -->
+
+    <div class="event-card" id="concert">
+
+        <div class="card-top">
+
+            <h2>Концерт талантов</h2>
+
+            <div class="category yellow">
+                Другое
+            </div>
+
+        </div>
+
+        <p class="description">
+            Выступления учеников школы.
+        </p>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+                <span>Дата</span>
+                <h4>20 мая 2026</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Время</span>
+                <h4>18:00</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Место</span>
+                <h4>Актовый зал</h4>
+            </div>
+
+            <div class="info-box">
+                <span>Классы</span>
+                <h4>7–12</h4>
+            </div>
+
+        </div>
+
+        <div class="question-section">
+
+            <button class="question-btn"
+            onclick="toggleQuestion(this)">
+                Задать вопрос
+            </button>
+
+            <div class="question-box">
+
+                <textarea
+                placeholder="Введите вопрос..."></textarea>
+
+                <button class="send-btn"
+                onclick="sendQuestion(this)">
+                    Отправить
+                </button>
+
+                <p class="success-message">
+                    Вопрос отправлен
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ADD EVENT MODAL -->
+<div id="eventModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Добавить мероприятие</h2>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <label>Название</label>
+                <input type="text" id="eventTitle" placeholder="Напр: Урок химии">
+            </div>
+            <div class="input-group">
+                <label>Категория</label>
+                <select id="eventCategory">
+                    <option value="blue">Олимпиада</option>
+                    <option value="green">Спорт</option>
+                    <option value="yellow">Другое</option>
+                </select>
+            </div>
+            <div class="info-grid-inputs">
+                <div class="input-group">
+                    <label>Время</label>
+                    <input type="time" id="eventTime">
+                </div>
+                <div class="input-group">
+                    <label>Место/Кабинет</label>
+                    <input type="text" id="eventLocation" placeholder="305">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Описание</label>
+                <textarea id="eventDescription" placeholder="Краткое описание..."></textarea>
+            </div>
+            <button id="saveEventBtn" class="save-btn">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
